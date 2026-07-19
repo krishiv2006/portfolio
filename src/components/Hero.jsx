@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef } from "react";
+import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowDown, Sparkles } from "lucide-react";
 import { profile } from "../data/portfolio";
@@ -113,8 +114,8 @@ export default function Hero() {
             transition={{ duration: 0.7, delay: 0.35 }}
             className="mt-8 flex flex-wrap gap-3"
           >
-            <a
-              href="#projects"
+            <Link
+              to="/projects"
               className="group bg-amber text-bg font-mono text-sm px-6 py-3 rounded-md font-medium hover:brightness-110 transition flex items-center gap-2"
             >
               <Sparkles
@@ -122,14 +123,14 @@ export default function Hero() {
                 className="group-hover:rotate-12 transition-transform"
               />
               view projects
-            </a>
-            <a
-              href="#contact"
+            </Link>
+            <Link
+              to="/contact"
               className="border border-line text-ink font-mono text-sm px-6 py-3 rounded-md hover:border-amber/50 hover:text-amber transition flex items-center gap-2"
             >
               get in touch
               <ArrowDown size={14} />
-            </a>
+            </Link>
             </motion.div>
           </div>
 

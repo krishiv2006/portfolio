@@ -1,36 +1,25 @@
 import { useEffect, useState } from "react";
+import { NavLink, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Download, Menu, X } from "lucide-react";
 
 const links = [
-  { id: "about", label: "about.md" },
-  { id: "projects", label: "projects/" },
-  { id: "skills", label: "skills.json" },
-  { id: "education", label: "education.md" },
-  { id: "contact", label: "contact.sh" },
+  { to: "/about", label: "about.md" },
+  { to: "/projects", label: "projects/" },
+  { to: "/skills", label: "skills.json" },
+  { to: "/education", label: "education.md" },
+  { to: "/contact", label: "contact.sh" },
 ];
 
 export default function Nav() {
-  const [active, setActive] = useState("");
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const location = useLocation();
 
-  /* scroll spy */
+  /* Close mobile menu on route change */
   useEffect(() => {
-    const sectionEls = links
-      .map((l) => document.getElementById(l.id))
-      .filter(Boolean);
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) setActive(entry.target.id);
-        });
-      },
-      { rootMargin: "-40% 0px -50% 0px" }
-    );
-    sectionEls.forEach((s) => observer.observe(s));
-    return () => observer.disconnect();
-  }, []);
+    setOpen(false);
+  }, [location.pathname]);
 
   /* scroll shadow */
   useEffect(() => {
@@ -56,51 +45,54 @@ export default function Nav() {
     >
       <nav className="max-w-6xl mx-auto flex items-center h-14 px-4 gap-1">
         {/* Logo */}
-        <a
-          href="#hero"
+        <NavLink
+          to="/"
           className="font-mono text-sm text-amber mr-6 shrink-0 flex items-center gap-2 group"
         >
           <span className="w-2 h-2 rounded-full bg-teal group-hover:scale-125 transition-transform" />
           <span className="group-hover:text-ink transition-colors">km.dev</span>
-        </a>
+        </NavLink>
 
         {/* Desktop tabs */}
         <div className="hidden md:flex items-stretch h-full">
-          {links.map((l) => {
-            const isActive = active === l.id;
-            return (
-              <a
-                key={l.id}
-                href={`#${l.id}`}
-                className={`relative font-mono text-xs px-4 h-full flex items-center transition-colors ${
+          {links.map((l) => (
+            <NavLink
+              key={l.to}
+              to={l.to}
+              className={({ isActive }) =>
+                `relative font-mono text-xs px-4 h-full flex items-center transition-colors ${
                   isActive
                     ? "text-ink bg-panel"
                     : "text-ink-dim hover:text-ink"
-                }`}
-              >
-                {/* left / right tab borders */}
-                <span
-                  className={`absolute inset-y-0 left-0 w-px transition-colors ${
-                    isActive ? "bg-line" : "bg-transparent"
-                  }`}
-                />
-                <span
-                  className={`absolute inset-y-0 right-0 w-px transition-colors ${
-                    isActive ? "bg-line" : "bg-transparent"
-                  }`}
-                />
-                {/* active underline accent */}
-                {isActive && (
-                  <motion.span
-                    layoutId="nav-indicator"
-                    className="absolute bottom-0 left-0 right-0 h-[2px] bg-amber"
-                    transition={{ type: "spring", stiffness: 500, damping: 35 }}
+                }`
+              }
+            >
+              {({ isActive }) => (
+                <>
+                  {/* left / right tab borders */}
+                  <span
+                    className={`absolute inset-y-0 left-0 w-px transition-colors ${
+                      isActive ? "bg-line" : "bg-transparent"
+                    }`}
                   />
-                )}
-                {l.label}
-              </a>
-            );
-          })}
+                  <span
+                    className={`absolute inset-y-0 right-0 w-px transition-colors ${
+                      isActive ? "bg-line" : "bg-transparent"
+                    }`}
+                  />
+                  {/* active underline accent */}
+                  {isActive && (
+                    <motion.span
+                      layoutId="nav-indicator"
+                      className="absolute bottom-0 left-0 right-0 h-[2px] bg-amber"
+                      transition={{ type: "spring", stiffness: 500, damping: 35 }}
+                    />
+                  )}
+                  {l.label}
+                </>
+              )}
+            </NavLink>
+          ))}
         </div>
 
         {/* Spacer */}
@@ -138,18 +130,19 @@ export default function Nav() {
           >
             <div className="px-4 py-3 flex flex-col gap-1">
               {links.map((l) => (
-                <a
-                  key={l.id}
-                  href={`#${l.id}`}
-                  onClick={() => setOpen(false)}
-                  className={`font-mono text-sm py-2.5 px-3 rounded-md transition-colors ${
-                    active === l.id
-                      ? "text-amber bg-amber-soft"
-                      : "text-ink-dim hover:text-ink hover:bg-panel"
-                  }`}
+                <NavLink
+                  key={l.to}
+                  to={l.to}
+                  className={({ isActive }) =>
+                    `font-mono text-sm py-2.5 px-3 rounded-md transition-colors ${
+                      isActive
+                        ? "text-amber bg-amber-soft"
+                        : "text-ink-dim hover:text-ink hover:bg-panel"
+                    }`
+                  }
                 >
                   {l.label}
-                </a>
+                </NavLink>
               ))}
               <a
                 href="/Krishiv_Modi_Resume.pdf"
